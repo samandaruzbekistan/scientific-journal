@@ -19,7 +19,13 @@ return new class extends Migration
             $table->unsignedBigInteger('academic_degree_id')->nullable();
             $table->foreign('academic_degree_id')->references('id')->on('academic_degrees')->onDelete('set null');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('status');
+            $table->string('country');
+            $table->string('region');
+            $table->string('city');
+            $table->string('passport_number');
+            $table->string('profile_image')->nullable();
+            $table->text('biography')->nullable();
+            $table->string('institution')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
