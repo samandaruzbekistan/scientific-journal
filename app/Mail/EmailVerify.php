@@ -13,12 +13,17 @@ class EmailVerify extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $name;
+    public $token;
+    public $id;
     /**
      * Create a new message instance.
      */
-    public function __construct()
+    public function __construct($name, $token, $id)
     {
-        //
+        $this->name = $name;
+        $this->id = $id;
+        $this->token = $token;
     }
 
     /**
@@ -27,7 +32,7 @@ class EmailVerify extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Inno-journal.uz da emailni tasdiqlash',
+            subject: 'inno-journal.uz da emailingizni tasdiqlang.',
         );
     }
 
@@ -37,7 +42,7 @@ class EmailVerify extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'mail.test',
+            view: 'mail.email_verify',
         );
     }
 

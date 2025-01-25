@@ -18,12 +18,8 @@ use Illuminate\Support\Facades\Route;
 */
 Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees']);
 Route::post('register',[AuthController::class, 'register']);
-Route::get('/email/verify/{id}/{hash}', [AuthController::class, 'verifyEmail'])
-    ->middleware(['signed'])
-    ->name('verification.verify');
-Route::post('/email/resend', [AuthController::class, 'resendVerification'])
-    ->middleware(['auth:api'])
-    ->name('verification.resend');
+Route::post('verify-email', [AuthController::class, 'verify_email']);
+Route::post('resend-verification', [AuthController::class, 'resend_email_verification']);
 
 
 

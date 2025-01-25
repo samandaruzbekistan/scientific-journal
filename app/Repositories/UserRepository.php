@@ -18,6 +18,11 @@ class UserRepository
         return User::findOrFail($id);
     }
 
+    public function getByEmail($email)
+    {
+        return User::where('email', $email)->first();
+    }
+
     public function getByPhone($phone)
     {
         return User::where('phone_number', $phone)->first();
