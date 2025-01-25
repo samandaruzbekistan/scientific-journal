@@ -13,6 +13,10 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+//Route::get('/', function () {
+//    return view('welcome');
+//});
+
 Route::get('/', function () {
-    return view('welcome');
+    \Illuminate\Support\Facades\Mail::to('darmonmedical@gmail.com')->send(new \App\Mail\EmailVerify());
 });

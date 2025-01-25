@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AcademicDegree;
 use App\Models\User;
 use App\Repositories\UserRepository;
 use Illuminate\Auth\Events\Verified;
@@ -14,21 +15,38 @@ class AuthController extends Controller
     {
     }
 
+    public function get_academic_degrees()
+    {
+        $data = AcademicDegree::all();
+
+        return response()->json($data);
+    }
+
     public function register(Request $request)
     {
         $validatedData = $request->validate([
             'full_name' => 'required|string|max:255',
-            'surname' => 'required|string|max:255',
-            'phone_number' => 'required|string|unique:users',
-            'password' => 'required|string|min:8',
-            'role' => 'required|string|in:seo,teacher,user',
+            'email' => 'required|email|unique:users',
+            'phone' => 'required|string|unique:users',
+            'country' => 'required|string',
+            'region' => 'required|string',
+            'city' => 'required|string',
+            'passport_number' => 'required|string',
+            'academic_degree_id' => 'required|integer|exists:academic_degrees,id',
         ]);
+
+        $validatedData['role'] = 'user';
 
         $user = $this->userRepository->create($validatedData);
 
-        $token = $user->createToken($user['password'])->plainTextToken;
+        $user->sendEmailVerificationNotification();
 
-        return response()->json(['message' => 'User registered successfully','token' => $token], 201);
+        return response()->json([
+            'message_en' => 'User registered successfully. Please verify your email.',
+            'message_uz' => 'Foydalanuvchi muvaffaqiyatli ro\'yxatdan o\'tdi. Iltimos, elektron pochtangizni tasdiqlang.',
+            'message_ru' => 'Пользователь успешно зарегистрирован. Пожалуйста, подтвердите свою электронную почту.',
+        ], 201);
+
     }
 
 
