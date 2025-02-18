@@ -13,19 +13,22 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('full_name');
+            $table->string('first_name');
+            $table->string('last_name');
+            $table->string('orcid');
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->unsignedBigInteger('academic_degree_id')->nullable();
             $table->foreign('academic_degree_id')->references('id')->on('academic_degrees')->onDelete('set null');
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('country');
-            $table->string('region');
-            $table->string('city');
-            $table->string('passport_number');
+            $table->string('country')->nullable();
+            $table->string('region')->nullable();
+            $table->string('city')->nullable();
+            $table->string('passport_number')->nullable();
             $table->string('profile_image')->nullable();
             $table->text('biography')->nullable();
             $table->string('institution')->nullable();
+            $table->string('status')->default('preparing');
             $table->rememberToken();
             $table->timestamps();
         });

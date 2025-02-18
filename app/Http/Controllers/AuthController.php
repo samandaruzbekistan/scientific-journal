@@ -27,14 +27,11 @@ class AuthController extends Controller
     public function register(Request $request)
     {
         $validatedData = $request->validate([
-            'full_name' => 'required|string|max:255',
+            'first_name' => 'required|string|max:255',
+            'last_name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
+            'orcid' => 'required|string',
             'phone' => 'required|string|unique:users',
-            'country' => 'required|string',
-            'region' => 'required|string',
-            'city' => 'required|string',
-            'passport_number' => 'required|string',
-            'academic_degree_id' => 'required|integer|exists:academic_degrees,id',
         ]);
 
         $validatedData['role'] = 'user';
@@ -43,8 +40,10 @@ class AuthController extends Controller
 
         $user = $this->userRepository->create($validatedData);
 
+        $full_name = $user->first_name . ' ' . $user->last_name;
+
         if($user){
-            $this->mailService->sendUserEmailVerification($user->full_name, $user->id, $user->email, $user->remember_token);
+            $this->mailService->sendUserEmailVerification($full_name, $user->id, $user->email, $user->remember_token);
         }
 
         return response()->json([
@@ -99,4 +98,9 @@ class AuthController extends Controller
         ], 404);
     }
 
+    public function login(Request $request){
+        $request->validate([
+            'email' => 'required|email|exists:users,email',
+        ]);
+    }
 }
