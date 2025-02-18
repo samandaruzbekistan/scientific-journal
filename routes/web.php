@@ -12,11 +12,3 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-//Route::get('/', function () {
-//    return view('welcome');
-//});
-
-Route::get('/', function () {
-    \Illuminate\Support\Facades\Mail::to('darmonmedical@gmail.com')->send(new \App\Mail\EmailVerify());
-});

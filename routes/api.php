@@ -16,10 +16,15 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "api" middleware group. Make something great!
 |
 */
-Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees']);
+
 Route::post('register',[AuthController::class, 'register']);
 Route::post('verify-email', [AuthController::class, 'verify_email']);
 Route::post('resend-verification', [AuthController::class, 'resend_email_verification']);
+Route::post('login',[AuthController::class, 'login']);
+Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees']);
+Route::post('user-update',[AuthController::class, 'update']);
+
+
 
 
 

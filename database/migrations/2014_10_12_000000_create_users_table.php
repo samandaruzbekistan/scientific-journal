@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('last_name');
             $table->string('orcid');
             $table->string('email')->unique();
+            $table->string('password');
             $table->string('phone')->unique();
             $table->unsignedBigInteger('academic_degree_id')->nullable();
             $table->foreign('academic_degree_id')->references('id')->on('academic_degrees')->onDelete('set null');

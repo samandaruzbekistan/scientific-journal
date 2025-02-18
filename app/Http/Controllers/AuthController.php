@@ -29,12 +29,26 @@ class AuthController extends Controller
         $validatedData = $request->validate([
             'first_name' => 'required|string|max:255',
             'last_name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
+            'email' => 'required|email',
             'orcid' => 'required|string',
-            'phone' => 'required|string|unique:users',
+            'phone' => 'required|string',
+            'locale' => 'required|string',
+            'password' => 'required|string|min:8',
         ]);
 
+        $user = $this->userRepository->getByEmail($validatedData['email']);
+
+        if ($user) {
+            return response()->json([
+                'en' => 'User with this email already exists.',
+                'uz' => 'Bu elektron pochta bilan foydalanuvchi allaqachon mavjud.',
+                'ru' => 'Пользователь с таким адресом электронной почты уже существует.',
+                'user_status' => $user->status,
+            ], 400);
+        }
+
         $validatedData['role'] = 'user';
+        $validatedData['password'] = Hash::make($validatedData['password']);
 
         $validatedData['remember_token'] = md5($validatedData['email'] . time());
 
@@ -43,7 +57,7 @@ class AuthController extends Controller
         $full_name = $user->first_name . ' ' . $user->last_name;
 
         if($user){
-            $this->mailService->sendUserEmailVerification($full_name, $user->id, $user->email, $user->remember_token);
+            $this->mailService->sendUserEmailVerification($full_name, $user->id, $user->email, $user->remember_token, $validatedData['locale']);
         }
 
         return response()->json([
@@ -81,11 +95,12 @@ class AuthController extends Controller
     public function resend_email_verification(Request $request){
         $request->validate([
             'email' => 'required|email',
+            'locale' => 'required|string',
         ]);
         $user = $this->userRepository->getByEmail($request->email);
         $full_name = $user->first_name . ' ' . $user->last_name;
         if($user){
-            $this->mailService->sendUserEmailVerification($full_name, $user->id, $user->email, $user->remember_token);
+            $this->mailService->sendUserEmailVerification($full_name, $user->id, $user->email, $user->remember_token, $request['locale']);
             return response()->json([
                 'en' => 'Verification email sent successfully.',
                 'uz' => 'Tasdiqlash elektron pochtasi muvaffaqiyatli yuborildi.',
@@ -102,6 +117,25 @@ class AuthController extends Controller
     public function login(Request $request){
         $request->validate([
             'email' => 'required|email|exists:users,email',
+            'password' => 'required|string',
+        ]);
+
+        $user = $this->userRepository->getByEmail($request->email);
+
+        if (!$user || !Hash::check($request->password, $user->password)) {
+            return response()->json([
+                'en' => 'Invalid credentials.',
+                'uz' => 'Noto\'g\'ri ma\'lumotlar.',
+                'ru' => 'Неверные учетные данные.',
+            ], 401);
+        }
+
+        $token = $user->createToken($user['email'])->plainTextToken;
+
+        return response()->json([
+            'token' => $token,
+            'user' => $user,
         ]);
     }
+
 }

@@ -16,14 +16,16 @@ class EmailVerify extends Mailable
     public $name;
     public $token;
     public $id;
+    public $locale;
     /**
      * Create a new message instance.
      */
-    public function __construct($name, $token, $id)
+    public function __construct($name, $token, $id, $locale)
     {
         $this->name = $name;
         $this->id = $id;
         $this->token = $token;
+        $this->locale = $locale;
     }
 
     /**
@@ -31,9 +33,19 @@ class EmailVerify extends Mailable
      */
     public function envelope(): Envelope
     {
-        return new Envelope(
-            subject: 'inno-journal.uz da emailingizni tasdiqlang.',
-        );
+        if($this->locale == 'en')
+            return new Envelope(
+                subject: 'Confirm your email at inno-journal.uz.',
+            );
+        elseif ($this->locale == 'uz')
+            return new Envelope(
+                subject: 'inno-journal.uz da emailingizni tasdiqlang.',
+            );
+        else{
+            return new Envelope(
+                subject: 'Подтвердите свой адрес электронной почты на inno-journal.uz.',
+            );
+        }
     }
 
     /**
@@ -41,9 +53,21 @@ class EmailVerify extends Mailable
      */
     public function content(): Content
     {
-        return new Content(
-            view: 'mail.email_verify',
-        );
+        if($this->locale == 'en'){
+            return new Content(
+                view: 'mail.email_verify_en',
+            );
+        }
+        elseif ($this->locale == 'uz'){
+            return new Content(
+                view: 'mail.email_verify_uz',
+            );
+        }
+        else{
+            return new Content(
+                view: 'mail.email_verify_ru',
+            );
+        }
     }
 
     /**
