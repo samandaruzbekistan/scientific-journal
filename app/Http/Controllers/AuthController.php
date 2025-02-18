@@ -47,9 +47,9 @@ class AuthController extends Controller
         }
 
         return response()->json([
-            'message_en' => 'User registered successfully. Please verify your email.',
-            'message_uz' => 'Foydalanuvchi muvaffaqiyatli ro\'yxatdan o\'tdi. Iltimos, elektron pochtangizni tasdiqlang.',
-            'message_ru' => 'Пользователь успешно зарегистрирован. Пожалуйста, подтвердите свою электронную почту.',
+            'en' => 'User registered successfully. Please verify your email.',
+            'uz' => 'Foydalanuvchi muvaffaqiyatli ro\'yxatdan o\'tdi. Iltimos, elektron pochtangizni tasdiqlang.',
+            'ru' => 'Пользователь успешно зарегистрирован. Пожалуйста, подтвердите свою электронную почту.',
         ], 201);
     }
 
@@ -64,17 +64,17 @@ class AuthController extends Controller
             $user->save();
             $token = $user->createToken($user['email'])->plainTextToken;
             return response()->json([
-                'message_en' => 'Email verified successfully.',
-                'message_uz' => 'Elektron pochta muvaffaqiyatli tasdiqlandi.',
-                'message_ru' => 'Электронная почта успешно подтверждена.',
+                'en' => 'Email verified successfully.',
+                'uz' => 'Elektron pochta muvaffaqiyatli tasdiqlandi.',
+                'ru' => 'Электронная почта успешно подтверждена.',
                 'token' => $token,
                 'user' => $user,
             ]);
         }
         return response()->json([
-            'message_en' => 'Invalid token.',
-            'message_uz' => 'Noto\'g\'ri token.',
-            'message_ru' => 'Неверный токен.',
+            'en' => 'Invalid token.',
+            'uz' => 'Noto\'g\'ri token.',
+            'ru' => 'Неверный токен.',
         ], 400);
     }
 
@@ -83,18 +83,19 @@ class AuthController extends Controller
             'email' => 'required|email',
         ]);
         $user = $this->userRepository->getByEmail($request->email);
+        $full_name = $user->first_name . ' ' . $user->last_name;
         if($user){
-            $this->mailService->sendUserEmailVerification($user->full_name, $user->id, $user->email, $user->remember_token);
+            $this->mailService->sendUserEmailVerification($full_name, $user->id, $user->email, $user->remember_token);
             return response()->json([
-                'message_en' => 'Verification email sent successfully.',
-                'message_uz' => 'Tasdiqlash elektron pochtasi muvaffaqiyatli yuborildi.',
-                'message_ru' => 'Письмо с подтверждением успешно отправлено.',
+                'en' => 'Verification email sent successfully.',
+                'uz' => 'Tasdiqlash elektron pochtasi muvaffaqiyatli yuborildi.',
+                'ru' => 'Письмо с подтверждением успешно отправлено.',
             ]);
         }
         return response()->json([
-            'message_en' => 'User not found.',
-            'message_uz' => 'Foydalanuvchi topilmadi.',
-            'message_ru' => 'Пользователь не найден.',
+            'en' => 'User not found.',
+            'uz' => 'Foydalanuvchi topilmadi.',
+            'ru' => 'Пользователь не найден.',
         ], 404);
     }
 

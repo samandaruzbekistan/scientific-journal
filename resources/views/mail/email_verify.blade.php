@@ -115,7 +115,7 @@
                 <tr>
                     <td align="center" valign="top" style="padding: 36px 24px;">
                         <a href="https://innojournal.uz" target="_blank" style="display: inline-block;">
-                            <img src="https://www.jonathanbalcombe.com/wp-content/uploads/2016/06/Nature-Journal-Logo-2.jpg" alt="Logo" border="0" style="display: block; max-width: 600px; min-width: 48px;">
+                            <img src="{{ url('logo.png') }}" alt="Logo" border="0" style="display: block; max-width: 600px; min-width: 48px;">
                         </a>
                     </td>
                 </tr>
@@ -196,7 +196,7 @@
                 <tr>
                     <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                         <p style="margin: 0;">Agarda bu tugma ishlamasa, brouzeringiz orqali ushbu havolani nusxalab kiring:</p>
-                        <p style="margin: 0;"><a href="https://innojournal.uz/verify-email/{{ $id }}/{{ $token }}" target="_blank">https://innojournal.uz/verify-email/{{ $id }}/{{ $token }}</a></p>
+                        <p style="margin: 0;"><a href="http://localhost:3000/verify-email/{{ $id }}/{{ $token }}" target="_blank">https://innojournal.uz/verify-email/{{ $id }}/{{ $token }}</a></p>
                     </td>
                 </tr>
                 <!-- end copy -->
