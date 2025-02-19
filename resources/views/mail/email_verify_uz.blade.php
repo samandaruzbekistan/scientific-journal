@@ -181,7 +181,7 @@
                                     <table border="0" cellpadding="0" cellspacing="0">
                                         <tr>
                                             <td align="center" bgcolor="#1a82e2" style="border-radius: 6px;">
-                                                <a href="https://innojournal.uz/verify-email/{{ $id }}/{{ $token }}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Emailni tasdiqlash</a>
+                                                <a href="http://localhost:3000/api/verify-email?id{{ $id }}&token={{ $token }}" target="_blank" style="display: inline-block; padding: 16px 36px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; color: #ffffff; text-decoration: none; border-radius: 6px;">Emailni tasdiqlash</a>
                                             </td>
                                         </tr>
                                     </table>
@@ -196,7 +196,7 @@
                 <tr>
                     <td align="left" bgcolor="#ffffff" style="padding: 24px; font-family: 'Source Sans Pro', Helvetica, Arial, sans-serif; font-size: 16px; line-height: 24px;">
                         <p style="margin: 0;">Agarda bu tugma ishlamasa, brouzeringiz orqali ushbu havolani nusxalab kiring:</p>
-                        <p style="margin: 0;"><a href="http://localhost:3000/verify-email/{{ $id }}/{{ $token }}" target="_blank">https://innojournal.uz/verify-email/{{ $id }}/{{ $token }}</a></p>
+                        <p style="margin: 0;"><a href="http://localhost:3000/api/verify-email?id{{ $id }}&token={{ $token }}" target="_blank">http://localhost:3000/api/verify-email?id{{ $id }}&token={{ $token }}</a></p>
                     </td>
                 </tr>
                 <!-- end copy -->
