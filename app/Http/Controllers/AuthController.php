@@ -33,7 +33,7 @@ class AuthController extends Controller
             'orcid' => 'required|string',
             'phone' => 'required|string',
             'locale' => 'required|string',
-            'password' => 'required|string|min:8',
+            'password' => 'required|string',
         ]);
 
         $user = $this->userRepository->getByEmail($validatedData['email']);
@@ -75,6 +75,7 @@ class AuthController extends Controller
         $user = $this->userRepository->getById($request->id);
         if($user->remember_token == $request->token){
             $user->email_verified_at = now();
+            $user->status = "pending";
             $user->save();
             $token = $user->createToken($user['email'])->plainTextToken;
             return response()->json([
