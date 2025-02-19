@@ -44,7 +44,14 @@ class AuthController extends Controller
                 'uz' => 'Bu elektron pochta bilan foydalanuvchi allaqachon mavjud.',
                 'ru' => 'Пользователь с таким адресом электронной почты уже существует.',
                 'user_status' => $user->status,
-            ], 400);
+            ], 422);
+        }
+        elseif ($this->userRepository->getByPhone($validatedData['phone'])) {
+            return response()->json([
+                'en' => 'User with this phone number already exists.',
+                'uz' => 'Bu telefon raqami bilan foydalanuvchi allaqachon mavjud.',
+                'ru' => 'Пользователь с таким номером телефона уже существует.',
+            ], 422);
         }
 
         $validatedData['role'] = 'user';
@@ -70,7 +77,7 @@ class AuthController extends Controller
     public function verify_email(Request $request){
         $request->validate([
             'token' => 'required|string',
-            'id' => 'required|integer|exists:users,id',
+            'id' => 'required|string|exists:users,id',
         ]);
         $user = $this->userRepository->getById($request->id);
         if($user->remember_token == $request->token){
@@ -84,13 +91,13 @@ class AuthController extends Controller
                 'ru' => 'Электронная почта успешно подтверждена.',
                 'token' => $token,
                 'user' => $user,
-            ]);
+            ], 200);
         }
         return response()->json([
             'en' => 'Invalid token.',
             'uz' => 'Noto\'g\'ri token.',
             'ru' => 'Неверный токен.',
-        ], 400);
+        ], 422);
     }
 
     public function resend_email_verification(Request $request){
@@ -128,7 +135,7 @@ class AuthController extends Controller
                 'en' => 'Invalid credentials.',
                 'uz' => 'Noto\'g\'ri ma\'lumotlar.',
                 'ru' => 'Неверные учетные данные.',
-            ], 401);
+            ], 422);
         }
 
         $token = $user->createToken($user['email'])->plainTextToken;

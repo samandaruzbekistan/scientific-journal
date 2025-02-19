@@ -15,7 +15,7 @@ class UserRepository
 
     public function getById($id)
     {
-        return User::findOrFail($id);
+        return User::find($id);
     }
 
     public function getByEmail($email)
@@ -25,7 +25,7 @@ class UserRepository
 
     public function getByPhone($phone)
     {
-        return User::where('phone_number', $phone)->first();
+        return User::where('phone', $phone)->first();
     }
 
     public function create(array $data): User

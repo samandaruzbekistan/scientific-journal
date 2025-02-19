@@ -16,9 +16,13 @@ class UserController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index($id)
     {
-        //
+        $user = $this->userRepository->getById($id);
+        if(!$user){
+            return response()->json(['en' => 'User not found', 'uz' => "Foydalanuvchi topilmadi", "ru" => "Пользователь не найден"], 404);
+        }
+        return response()->json(['data' => $user], 200);
     }
 
     /**

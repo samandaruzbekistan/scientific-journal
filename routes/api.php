@@ -22,6 +22,7 @@ Route::post('verify-email', [AuthController::class, 'verify_email']);
 Route::post('resend-verification', [AuthController::class, 'resend_email_verification']);
 Route::post('login',[AuthController::class, 'login']);
 Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees']);
+Route::get('users/{id?}', [UserController::class, 'index']);
 Route::post('user-update',[AuthController::class, 'update']);
 
 
