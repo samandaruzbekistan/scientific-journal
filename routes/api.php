@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -24,6 +25,8 @@ Route::post('login',[AuthController::class, 'login']);
 Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees']);
 Route::get('users/{id?}', [UserController::class, 'index']);
 Route::post('user-update',[AuthController::class, 'update']);
+
+Route::post('admin/login', [AdminController::class, 'login']);
 
 
 
