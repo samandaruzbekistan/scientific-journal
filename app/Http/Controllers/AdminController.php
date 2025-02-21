@@ -35,4 +35,18 @@ class AdminController extends Controller
             ], 404);
         }
     }
+
+    public function show($id){
+        $admin = $this->adminRepository->getAdminById($id);
+
+        if(!$admin){
+            return response()->json([
+                'message' => "Admin topilmadi"
+            ], 404);
+        }
+
+        return response()->json([
+            'admin' => $admin
+        ], 200);
+    }
 }

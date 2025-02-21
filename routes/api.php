@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\JournalController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -26,7 +27,12 @@ Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees
 Route::get('users/{id?}', [UserController::class, 'index']);
 Route::post('user-update',[AuthController::class, 'update']);
 
-Route::post('admin/login', [AdminController::class, 'login']);
+Route::prefix('admin')->group(function () {
+    Route::post('login', [AdminController::class, 'login']);
+
+    Route::get('get/{id}', [AdminController::class, 'show']);
+    Route::apiResource('journals', JournalController::class);
+});
 
 
 
