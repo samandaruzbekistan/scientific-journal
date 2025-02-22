@@ -11,7 +11,7 @@ class JournalRepository
     }
 
     public function getJournals(){
-        return Journal::all();
+        return Journal::latest()->get();
     }
 
     public function createJournal($data){

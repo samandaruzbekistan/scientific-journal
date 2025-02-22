@@ -36,7 +36,8 @@ class JournalController extends Controller
             'name_uz' => 'required|string',
             'name_ru' => 'required|string',
             'name_en' => 'required|string',
-            'year' => 'required|numeric',
+            'year' => 'required|string',
+            'number' => 'required|string',
             'issn' => 'required|string',
             'cover_image_uz' => 'required|file|mimes:jpeg,png,jpg',
             'cover_image_ru' => 'required|file|mimes:jpeg,png,jpg',
@@ -46,20 +47,20 @@ class JournalController extends Controller
         $file = $request->file('cover_image_uz')->getClientOriginalExtension();
         $name = md5(microtime());
         $photo_name = $name.".".$file;
-        $request->file('cover_image_uz')->move('images/',$photo_name);
-        $validated['cover_image_uz'] = 'images/journal_covers'.$photo_name;
+        $request->file('cover_image_uz')->move('images/journal_covers/',$photo_name);
+        $validated['cover_image_uz'] = 'images/journal_covers/'.$photo_name;
 
         $file = $request->file('cover_image_ru')->getClientOriginalExtension();
         $name = md5(microtime());
         $photo_name = $name.".".$file;
-        $request->file('cover_image_ru')->move('images/',$photo_name);
-        $validated['cover_image_ru'] = 'images/journal_covers'.$photo_name;
+        $request->file('cover_image_ru')->move('images/journal_covers/',$photo_name);
+        $validated['cover_image_ru'] = 'images/journal_covers/'.$photo_name;
 
         $file = $request->file('cover_image_en')->getClientOriginalExtension();
         $name = md5(microtime());
         $photo_name = $name.".".$file;
-        $request->file('cover_image_en')->move('images/',$photo_name);
-        $validated['cover_image_en'] = 'images/journal_covers'.$photo_name;
+        $request->file('cover_image_en')->move('images/journal_covers/',$photo_name);
+        $validated['cover_image_en'] = 'images/journal_covers/'.$photo_name;
 
         $journal = $this->journalRepository->createJournal($validated);
 
