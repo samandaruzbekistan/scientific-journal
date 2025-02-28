@@ -27,6 +27,8 @@ Route::post('login',[AuthController::class, 'login']);
 Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees']);
 Route::get('users/{id?}', [UserController::class, 'index']);
 Route::post('user-update',[AuthController::class, 'update']);
+Route::post('store-article',[\App\Http\Controllers\ArticleController::class, 'store']);
+
 
 Route::apiResource('authors', AuthorController::class);
 

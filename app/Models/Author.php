@@ -13,10 +13,14 @@ class Author extends Model
         'first_name',
         'last_name',
         'orcid',
-        'role', // Add this line
+        'roles', // Add this line
         'email',
-        'academic_degree_id',
+        'academic_degree',
         'institution',
         'country',
     ];
+
+    public function article(){
+        return $this->belongsTo(Article::class);
+    }
 }

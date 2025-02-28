@@ -15,11 +15,12 @@ return new class extends Migration
             $table->id();
             $table->string('first_name');
             $table->string('last_name');
-            $table->string('role')->default('author');
+            $table->string('roles')->default('author');
             $table->string('orcid')->nullable();
             $table->string('email')->nullable();
-            $table->unsignedBigInteger('academic_degree_id')->nullable();
-            $table->foreign('academic_degree_id')->references('id')->on('academic_degrees')->onDelete('set null');
+            $table->string('academic_degree')->nullable();
+            $table->unsignedBigInteger('article_id')->nullable();
+            $table->foreign('article_id')->references('id')->on('articles')->onDelete('set null');
             $table->text('institution')->nullable();
             $table->string('country')->nullable();
             $table->timestamps();
