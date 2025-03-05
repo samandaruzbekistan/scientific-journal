@@ -18,6 +18,7 @@ class Journal extends Model
         'cover_image_ru',
         'cover_image_en',
         'number',
+        'template',
         'year',
     ];
 }

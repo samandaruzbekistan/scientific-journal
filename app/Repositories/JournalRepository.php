@@ -25,4 +25,8 @@ class JournalRepository
     public function deleteJournal($id){
         return Journal::where('id', $id)->delete();
     }
+
+    public function getActiveJournal(){
+        return Journal::where('status', 1)->first();
+    }
 }

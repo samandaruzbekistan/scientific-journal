@@ -155,9 +155,6 @@ return [
     */
 
     'providers' => [
-        Elibyy\TCPDF\ServiceProvider::class,
-
-
         /*
          * Laravel Framework Service Providers...
          */
@@ -212,7 +209,6 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
-        'PDF' => Elibyy\TCPDF\Facades\TCPDF::class
     ])->toArray(),
 
 ];

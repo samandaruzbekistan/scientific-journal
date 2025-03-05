@@ -22,7 +22,8 @@ return new class extends Migration
             $table->string('number');
             $table->string('year');
             $table->string('issn');
-            $table->string('status')->default('preparing');
+            $table->string('template');
+            $table->string('status')->default('active');
             $table->timestamps();
         });
     }

@@ -19,12 +19,9 @@ class JournalController extends Controller
         return response()->json($this->journalRepository->getJournals(), 200);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
+    public function get_active_journal()
     {
-
+        return response()->json($this->journalRepository->getActiveJournal(), 200);
     }
 
     /**
@@ -42,6 +39,7 @@ class JournalController extends Controller
             'cover_image_uz' => 'required|file|mimes:jpeg,png,jpg',
             'cover_image_ru' => 'required|file|mimes:jpeg,png,jpg',
             'cover_image_en' => 'required|file|mimes:jpeg,png,jpg',
+            'template' => 'required|string',
         ]);
 
         $file = $request->file('cover_image_uz')->getClientOriginalExtension();
@@ -61,6 +59,12 @@ class JournalController extends Controller
         $photo_name = $name.".".$file;
         $request->file('cover_image_en')->move('images/journal_covers/',$photo_name);
         $validated['cover_image_en'] = 'images/journal_covers/'.$photo_name;
+
+        $template = $request->file('template')->getClientOriginalExtension();
+        $name = md5(microtime());
+        $template_name = $name.".".$template;
+        $request->file('template')->move('images/journal_templates/',$template_name);
+        $validated['template'] = 'images/journal_templates/'.$template_name;
 
         $journal = $this->journalRepository->createJournal($validated);
 

@@ -16,9 +16,9 @@ return new class extends Migration
             $table->string('title_uz');
             $table->string('title_ru');
             $table->string('title_en');
-            $table->longText('body_uz');
-            $table->longText('body_ru');
-            $table->longText('body_en');
+            $table->longText('body_uz')->nullable();
+            $table->longText('body_ru')->nullable();
+            $table->longText('body_en')->nullable();
             $table->text('keywords_uz');
             $table->text('keywords_ru');
             $table->text('keywords_en');
