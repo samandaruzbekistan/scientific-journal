@@ -60,4 +60,8 @@ class User extends Authenticatable implements MustVerifyEmail
     public function articleType(){
         return $this->belongsTo(ArticleType::class, 'article_type_id', 'id');
     }
+
+    public function articles(){
+        return $this->hasMany(Article::class, 'user_id', 'id');
+    }
 }

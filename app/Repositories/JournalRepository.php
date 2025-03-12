@@ -32,4 +32,11 @@ class JournalRepository
     public function change_status_to_completed($id){
         return Journal::where('id', $id)->update(['status' => 'completed']);
     }
+
+    public function increment_article_count($id){
+        $journal = Journal::where('id', $id)->first();
+        $article_count = $journal->article_count;
+        $article_count++;
+        return Journal::where('id', $id)->update(['article_count' => $article_count]);
+    }
 }

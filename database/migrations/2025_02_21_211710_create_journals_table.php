@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('issn');
             $table->string('template');
             $table->string('status')->default('active');
+            $table->integer('article_count')->default(0);
             $table->timestamps();
         });
     }

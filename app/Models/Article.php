@@ -27,6 +27,8 @@ class Article extends Model
         'en_file',
         'books',
         'article_type_id',
+        'user_id',
+        'journal_id',
     ];
 
     public function authors(){

@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Repositories\ArticleRepository;
+use App\Repositories\ArticleTypeRepository;
 use App\Repositories\AuthorRepository;
+use App\Repositories\InvoiceRepository;
 use App\Repositories\JournalRepository;
 use Illuminate\Http\Request;
 
@@ -12,7 +14,9 @@ class ArticleController extends Controller
     public function __construct(
         protected ArticleRepository $articleRepository,
         protected AuthorRepository $authorRepository,
-        protected JournalRepository $journalRepository
+        protected JournalRepository $journalRepository,
+        protected InvoiceRepository $invoiceRepository,
+        protected ArticleTypeRepository $articleTypeRepository,
     )
     {
     }
@@ -36,7 +40,8 @@ class ArticleController extends Controller
             'file_ru' => 'required|mimes:doc,docx,pdf',
             'file_en' => 'required|mimes:doc,docx,pdf',
             'authors' => 'required|string',
-            'article_type_id' => 'required|integer'
+            'article_type_id' => 'required|integer',
+            'user_id' => 'required|integer',
         ]);
 
         $active_journal = $this->journalRepository->getActiveJournal();
@@ -69,6 +74,8 @@ class ArticleController extends Controller
 
         $article = $this->articleRepository->createArticle($validate_data);
 
+        $this->journalRepository->increment_article_count($active_journal['id']);
+
         $authors = json_decode($request->authors, true);
 
         foreach ($authors as $author) {
@@ -76,10 +83,27 @@ class ArticleController extends Controller
             $this->authorRepository->createAuthor($author);
         }
 
+        $article_type = $this->articleTypeRepository->getArticleType($validate_data['article_type_id']);
+
+        $invoice_number = $this->invoiceRepository->generateInvoiceNumber();
+
+        $invoice_data = [
+            'invoice_number' => $invoice_number,
+            'status' => 'pending',
+            'user_id' => $request->user_id,
+            'journal_id' => $active_journal['id'],
+            'article_id' => $article['id'],
+            'article_type_id' => $validate_data['article_type_id'],
+            'price' => $article_type['price']
+        ];
+
+        $invoice = $this->invoiceRepository->createInvoice($invoice_data);
+
         return response()->json([
             'message_en' => 'Article has been created successfully',
             'message_ru' => 'Статья успешно создана',
             'message_uz' => 'Maqola muvaffaqiyatli yaratildi',
+            'invoice' => $invoice,
             'data' => $article
         ]);
     }
