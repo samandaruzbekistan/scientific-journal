@@ -30,6 +30,9 @@ return new class extends Migration
             $table->text('biography')->nullable();
             $table->string('institution')->nullable();
             $table->string('status')->default('preparing');
+            $table->string('role')->default('user');
+            $table->unsignedBigInteger('article_type_id')->nullable();
+            $table->foreign('article_type_id')->references('id')->on('article_types')->onDelete('set null');
             $table->rememberToken();
             $table->timestamps();
         });

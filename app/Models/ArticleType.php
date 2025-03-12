@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Journal extends Model
+class ArticleType extends Model
 {
     use HasFactory;
 
@@ -13,13 +13,7 @@ class Journal extends Model
         'name_uz',
         'name_ru',
         'name_en',
-        'issn',
-        'cover_image_uz',
-        'cover_image_ru',
-        'cover_image_en',
-        'number',
-        'template',
-        'status',
-        'year',
+        'created_at',
+        'updated_at',
     ];
 }

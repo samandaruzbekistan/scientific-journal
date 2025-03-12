@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ArticleTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
 use App\Http\Controllers\JournalController;
@@ -29,7 +30,10 @@ Route::get('users/{id?}', [UserController::class, 'index']);
 Route::post('user-update',[AuthController::class, 'update']);
 
 Route::get('get-active-journal',[JournalController::class, 'get_active_journal']);
+
+
 Route::post('store-article',[\App\Http\Controllers\ArticleController::class, 'store']);
+Route::get('get-article-types', [ArticleTypeController::class, 'index']);
 
 
 Route::apiResource('authors', AuthorController::class);
@@ -37,8 +41,14 @@ Route::apiResource('authors', AuthorController::class);
 Route::prefix('admin')->group(function () {
     Route::post('login', [AdminController::class, 'login']);
 
+    Route::apiResource('article-types', ArticleTypeController::class);
+
+    Route::get('get-article-prices', [ArticleTypeController::class, 'get_article_prices']);
+    Route::post('create-article-price', [AdminController::class, 'create_article_price']);
+
     Route::get('get/{id}', [AdminController::class, 'show']);
     Route::apiResource('journals', JournalController::class);
+    Route::get('change-journal-status/{id}', [JournalController::class, 'change_status']);
 });
 
 

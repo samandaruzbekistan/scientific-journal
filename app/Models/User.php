@@ -30,10 +30,12 @@ class User extends Authenticatable implements MustVerifyEmail
         'country',
         'region',
         'city',
+        'role',
         'passport_number',
         'profile_image',
         'biography',
         'institution',
+        'article_type_id',
         'remember_token',
     ];
 
@@ -54,4 +56,8 @@ class User extends Authenticatable implements MustVerifyEmail
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function articleType(){
+        return $this->belongsTo(ArticleType::class, 'article_type_id', 'id');
+    }
 }

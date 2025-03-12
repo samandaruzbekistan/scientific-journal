@@ -22,13 +22,18 @@ class Article extends Model
         'body_uz',
         'body_ru',
         'body_en',
-        'file_uz',
-        'file_ru',
-        'file_en',
-        'books'
+        'uz_file',
+        'ru_file',
+        'en_file',
+        'books',
+        'article_type_id',
     ];
 
     public function authors(){
         return $this->hasMany(Author::class, 'article_id', 'id');
+    }
+
+    public function articleType(){
+        return $this->belongsTo(ArticleType::class, 'article_type_id', 'id');
     }
 }

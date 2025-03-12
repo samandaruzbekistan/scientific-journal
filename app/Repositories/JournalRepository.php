@@ -27,6 +27,9 @@ class JournalRepository
     }
 
     public function getActiveJournal(){
-        return Journal::where('status', 1)->first();
+        return Journal::where('status', 'active')->first();
+    }
+    public function change_status_to_completed($id){
+        return Journal::where('id', $id)->update(['status' => 'completed']);
     }
 }

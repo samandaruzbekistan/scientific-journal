@@ -29,6 +29,16 @@ class JournalController extends Controller
      */
     public function store(Request $request)
     {
+        $active_journal = $this->journalRepository->getActiveJournal();
+
+        if($active_journal){
+            return response()->json([
+                'message_uz' => 'Aktiv jurnal mavjud',
+                'message_ru' => 'Активный журнал существует',
+                'message_en' => 'Active journal exists'
+            ], 400);
+        }
+
         $validated = $request->validate([
             'name_uz' => 'required|string',
             'name_ru' => 'required|string',
@@ -39,7 +49,7 @@ class JournalController extends Controller
             'cover_image_uz' => 'required|file|mimes:jpeg,png,jpg',
             'cover_image_ru' => 'required|file|mimes:jpeg,png,jpg',
             'cover_image_en' => 'required|file|mimes:jpeg,png,jpg',
-            'template' => 'required|string',
+            'template' => 'required|file|mimes:doc,docx,pdf',
         ]);
 
         $file = $request->file('cover_image_uz')->getClientOriginalExtension();
@@ -107,5 +117,23 @@ class JournalController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function change_status(string $id)
+    {
+        $journal = $this->journalRepository->getJournal($id);
+        if(!$journal){
+            return response()->json([
+                'message_uz' => 'Jurnal topilmadi',
+                'message_ru' => 'Журнал не найден',
+                'message_en' => 'Journal not found'
+            ], 404);
+        }
+        $this->journalRepository->change_status_to_completed($id);
+        return response()->json([
+            'message_uz' => 'Jurnal muvaffaqiyatli yakunlandi',
+            'message_ru' => 'Журнал успешно завершен',
+            'message_en' => 'Journal completed successfully'
+        ], 200);
     }
 }

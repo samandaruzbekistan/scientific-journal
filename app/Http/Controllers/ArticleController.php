@@ -4,17 +4,21 @@ namespace App\Http\Controllers;
 
 use App\Repositories\ArticleRepository;
 use App\Repositories\AuthorRepository;
+use App\Repositories\JournalRepository;
 use Illuminate\Http\Request;
 
 class ArticleController extends Controller
 {
-    public function __construct(protected ArticleRepository $articleRepository, protected AuthorRepository $authorRepository)
+    public function __construct(
+        protected ArticleRepository $articleRepository,
+        protected AuthorRepository $authorRepository,
+        protected JournalRepository $journalRepository
+    )
     {
     }
 
     public function store(Request $request){
-        $request->validate([
-            'journal_id' => 'required|numeric',
+        $validate_data = $request->validate([
             'title_uz' => 'required|string',
             'title_ru' => 'required|string',
             'title_en' => 'required|string',
@@ -32,34 +36,45 @@ class ArticleController extends Controller
             'file_ru' => 'required|mimes:doc,docx,pdf',
             'file_en' => 'required|mimes:doc,docx,pdf',
             'authors' => 'required|string',
-            'authors.*.first_name' => 'required',
-            'authors.*.last_name' => 'required',
-            'authors.*.orcid' => 'required',
-            'authors.*.roles' => 'required', // Add this line
-            'authors.*.email' => 'required',
-            'authors.*.academic_degree' => 'required',
-            'authors.*.institution' => 'required',
-            'authors.*.country' => 'required',
+            'article_type_id' => 'required|integer'
         ]);
 
-        $article = $this->articleRepository->createArticle($request->all());
+        $active_journal = $this->journalRepository->getActiveJournal();
 
-        foreach ($request->authors as $author) {
+        if(!$active_journal){
+            return response()->json([
+                'message_en' => 'There is no active journal',
+                'message_ru' => 'Активный журнал не найден',
+                'message_uz' => 'Faol jurnal topilmadi',
+            ], 404);
+        }
+
+        $validate_data['journal_id'] = $active_journal['id'];
+
+        $file = $request->file('file_uz')->getClientOriginalExtension();
+        $microtime = md5(microtime());
+        $file_name = $microtime."_uz.".$file;
+        $request->file('file_uz')->move('articles/',$file_name);
+        $validate_data['uz_file'] = 'articles/'.$file_name;
+
+        $file = $request->file('file_ru')->getClientOriginalExtension();
+        $file_name = $microtime."_ru.".$file;
+        $request->file('file_ru')->move('articles/',$file_name);
+        $validate_data['ru_file'] = 'articles/'.$file_name;
+
+        $file = $request->file('file_en')->getClientOriginalExtension();
+        $file_name = $microtime."_en.".$file;
+        $request->file('file_en')->move('articles/',$file_name);
+        $validate_data['en_file'] = 'articles/'.$file_name;
+
+        $article = $this->articleRepository->createArticle($validate_data);
+
+        $authors = json_decode($request->authors, true);
+
+        foreach ($authors as $author) {
             $author['article_id'] = $article['id'];
             $this->authorRepository->createAuthor($author);
         }
-
-        $request->file('file_uz')->move('articles', $article['id'].'_uz.'.$request->file('file_uz')->extension());
-        $request->file('file_ru')->move('articles', $article['id'].'_ru.'.$request->file('file_ru')->extension());
-        $request->file('file_en')->move('articles', $article['id'].'_en.'.$request->file('file_en')->extension());
-
-        $this->articleRepository->updateArticle([
-            'uz_file' => "articles/".$article['id'].'_uz.'.$request->file('file_uz')->extension(),
-            'ru_file' => "articles/".$article['id'].'_ru.'.$request->file('file_ru')->extension(),
-            'en_file' => "articles/".$article['id'].'_en.'.$request->file('file_en')->extension(),
-        ], $article['id']);
-
-        $article = $this->articleRepository->getArticle($article['id']);
 
         return response()->json([
             'message_en' => 'Article has been created successfully',

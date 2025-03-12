@@ -30,6 +30,8 @@ return new class extends Migration
             $table->string('en_file')->nullable();
             $table->text('books');
             $table->string('status')->default('pending');
+            $table->unsignedBigInteger('article_type_id');
+            $table->foreign('article_type_id')->references('id')->on('article_types')->onDelete('cascade');
             $table->timestamps();
         });
     }
