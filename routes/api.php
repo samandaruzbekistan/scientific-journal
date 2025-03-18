@@ -55,7 +55,9 @@ Route::prefix('admin')->group(function () {
     Route::apiResource('editorials', EditorialController::class);
     Route::apiResource('editorial-teams', EditorialsTeamController::class);
 
-    Route::post('add-editorial', [EditorialsTeamController::class, 'add_editorial']);
+    Route::post('editorial-add-to-team', [EditorialsTeamController::class, 'add_editorial']);
+    Route::post('editorial-delete-from-team', [EditorialsTeamController::class, 'delete_editorial']);
+
 });
 
 

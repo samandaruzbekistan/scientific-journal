@@ -3,13 +3,18 @@
 namespace App\Http\Controllers;
 
 use App\Models\EditorialsTeam;
+use App\Repositories\ArticleTypeRepository;
 use App\Repositories\EditorialRepository;
 use App\Repositories\EditorialsTeamRepository;
 use Illuminate\Http\Request;
 
 class EditorialsTeamController extends Controller
 {
-    public function __construct(protected EditorialRepository $editorialRepository, protected EditorialsTeamRepository $editorialsTeamRepository)
+    public function __construct(
+        protected EditorialRepository $editorialRepository,
+        protected EditorialsTeamRepository $editorialsTeamRepository,
+        protected ArticleTypeRepository $articleTypeRepository
+    )
     {
     }
 
@@ -116,7 +121,6 @@ class EditorialsTeamController extends Controller
     {
         $validated = $request->validate([
             'article_type_id' => 'required|integer|exists:article_types,id',
-            'name' => 'required|string|max:255',
         ]);
 
         $team = $this->editorialsTeamRepository->getByTypeId($validated['article_type_id']);
@@ -126,6 +130,17 @@ class EditorialsTeamController extends Controller
                 'message' => 'Taxriryat a\'zolari jamoasi allaqachon mavjud',
             ], 404);
         }
+
+        $article_type = $this->articleTypeRepository->getArticleType($validated['article_type_id']);
+
+        if (!$article_type) {
+            return response()->json([
+                'message' => 'Maqola turi topilmadi',
+            ], 404);
+        }
+
+        $validated['name'] = $article_type->name_uz;
+        $validated['json_data'] = "[]";
 
         $editorial = $this->editorialsTeamRepository->create($validated);
 
@@ -140,7 +155,7 @@ class EditorialsTeamController extends Controller
      */
     public function show($id)
     {
-        $team = $this->editorialsTeamRepository->getByTypeId($id);
+        $team = $this->editorialsTeamRepository->getById($id);
 
         if (!$team) {
             return response()->json([

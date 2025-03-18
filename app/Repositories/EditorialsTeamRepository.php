@@ -11,7 +11,7 @@ class EditorialsTeamRepository
     }
 
     public function getByTypeId($id){
-        return EditorialsTeam::where('article_type_id', $id)->get();
+        return EditorialsTeam::where('article_type_id', $id)->first();
     }
 
     public function getById($id){
