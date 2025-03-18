@@ -4,6 +4,8 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\ArticleTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
+use App\Http\Controllers\EditorialController;
+use App\Http\Controllers\EditorialsTeamController;
 use App\Http\Controllers\JournalController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
@@ -49,6 +51,11 @@ Route::prefix('admin')->group(function () {
     Route::get('get/{id}', [AdminController::class, 'show']);
     Route::apiResource('journals', JournalController::class);
     Route::get('change-journal-status/{id}', [JournalController::class, 'change_status']);
+
+    Route::apiResource('editorials', EditorialController::class);
+    Route::apiResource('editorial-teams', EditorialsTeamController::class);
+
+    Route::post('add-editorial', [EditorialsTeamController::class, 'add_editorial']);
 });
 
 

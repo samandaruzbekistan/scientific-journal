@@ -40,6 +40,10 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+        'editorial' => [
+            'driver' => 'session',
+            'provider' => 'editorials',
+        ],
     ],
 
     /*
@@ -69,6 +73,11 @@ return [
         //     'driver' => 'database',
         //     'table' => 'users',
         // ],
+
+        'editorials' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Editorial::class,
+        ],
     ],
 
     /*
