@@ -22,11 +22,11 @@ class EditorialsTeamRepository
         return EditorialsTeam::create($data);
     }
 
-    public function update($data, $id){
-        return EditorialsTeam::find($id)->update($data);
-    }
-
-    public function delete($id){
-        return EditorialsTeam::destroy($id);
-    }
+//    public function update($data, $id){
+//        return EditorialsTeam::find($id)->update($data);
+//    }
+//
+//    public function delete($id){
+//        return EditorialsTeam::destroy($id);
+//    }
 }
