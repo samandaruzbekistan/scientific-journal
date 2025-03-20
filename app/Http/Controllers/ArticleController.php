@@ -36,6 +36,12 @@ class ArticleController extends Controller
         return response()->json($article);
     }
 
+    public function get_articles($user_id){
+        $articles = $this->articleRepository->getArticlesByUserId($user_id);
+
+        return response()->json($articles);
+    }
+
     public function store(Request $request){
         $validate_data = $request->validate([
             'title_uz' => 'required|string',

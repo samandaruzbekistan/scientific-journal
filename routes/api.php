@@ -31,6 +31,7 @@ Route::post('login',[AuthController::class, 'login']);
 Route::get('get-academic-degrees', [AuthController::class, 'get_academic_degrees']);
 Route::get('users/{id?}', [UserController::class, 'index']);
 Route::post('user-update',[AuthController::class, 'update']);
+Route::get('user/articles/{id}', [ArticleController::class, 'get_articles']);
 
 Route::get('get-active-journal',[JournalController::class, 'get_active_journal']);
 

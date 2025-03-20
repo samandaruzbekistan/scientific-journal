@@ -10,6 +10,10 @@ class ArticleRepository
         return Article::where('id', $id)->first();
     }
 
+    public function getArticlesByUserId($user_id){
+        return Article::where('user_id', $user_id)->get();
+    }
+
     public function getArticles(){
         return Article::latest()->get();
     }
