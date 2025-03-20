@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AdminController;
+use App\Http\Controllers\ArticleController;
 use App\Http\Controllers\ArticleTypeController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\AuthorController;
@@ -34,9 +35,9 @@ Route::post('user-update',[AuthController::class, 'update']);
 Route::get('get-active-journal',[JournalController::class, 'get_active_journal']);
 
 
-Route::post('store-article',[\App\Http\Controllers\ArticleController::class, 'store']);
+Route::post('store-article',[ArticleController::class, 'store']);
 Route::get('get-article-types', [ArticleTypeController::class, 'index']);
-
+Route::post('send-to-review', [ArticleController::class, 'send_to_review']);
 
 Route::apiResource('authors', AuthorController::class);
 
@@ -57,6 +58,16 @@ Route::prefix('admin')->group(function () {
 
     Route::post('editorial-add-to-team', [EditorialsTeamController::class, 'add_editorial']);
     Route::post('editorial-delete-from-team', [EditorialsTeamController::class, 'delete_editorial']);
+
+});
+
+Route::prefix('editorial')->group(function () {
+    Route::post('login', [EditorialController::class, 'login']);
+    Route::post('review-articles', [EditorialController::class, 'get_review_articles']);
+    Route::get('article/{id}', [EditorialController::class, 'get_article']);
+    Route::post('send-article-to-editorial', [EditorialController::class, 'send_to_editorial']);
+    Route::post('get-votes', [EditorialController::class, 'get_publish_votes']);
+    Route::post('vote', [EditorialController::class, 'vote']);
 
 });
 

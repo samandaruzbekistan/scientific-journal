@@ -17,8 +17,23 @@ class ArticleController extends Controller
         protected JournalRepository $journalRepository,
         protected InvoiceRepository $invoiceRepository,
         protected ArticleTypeRepository $articleTypeRepository,
+
     )
     {
+    }
+
+    public function show($id){
+        $article = $this->articleRepository->getArticle($id);
+
+        if(!$article){
+            return response()->json([
+                'message_en' => 'Article not found',
+                'message_ru' => 'Статья не найдена',
+                'message_uz' => 'Maqola topilmadi',
+            ], 404);
+        }
+
+        return response()->json($article);
     }
 
     public function store(Request $request){
@@ -108,11 +123,63 @@ class ArticleController extends Controller
         ]);
     }
 
-    protected function replaceVariables($html, $data)
+    public function send_to_review(Request $request)
     {
-        foreach ($data as $key => $value) {
-            $html = str_replace($key, $value, $html);
+        $validate_data = $request->validate([
+            'article_id' => 'required|integer',
+            'user_id' => 'required|integer|exists:users,id',
+        ]);
+
+        $article = $this->articleRepository->getArticle($validate_data['article_id']);
+
+        if(!$article){
+            return response()->json([
+                'message_en' => 'Article not found',
+                'message_ru' => 'Статья не найдена',
+                'message_uz' => 'Maqola topilmadi',
+            ], 404);
         }
-        return $html;
+
+        if($article['status'] != 'pending'){
+            return response()->json([
+                'message_en' => 'Article is not pending',
+                'message_ru' => 'Статья не находится в ожидании',
+                'message_uz' => 'Maqola kutilmoqda emas',
+            ], 400);
+        }
+
+        if($article['user_id'] != $validate_data['user_id']){
+            return response()->json([
+                'message_en' => 'You are not allowed to send this article to review',
+                'message_ru' => 'Вы не можете отправить эту статью на рассмотрение',
+                'message_uz' => 'Bu maqolani ko`rib chiqishga ruxsat etilmadingiz',
+            ], 400);
+        }
+
+        $invoice = $this->invoiceRepository->getInvoiceByArticleId($validate_data['article_id']);
+
+        if(!$invoice){
+            return response()->json([
+                'message_en' => 'Invoice not found',
+                'message_ru' => 'Счет не найден',
+                'message_uz' => 'Hisob-faktura topilmadi',
+            ], 404);
+        }
+
+//        if($invoice['status'] != 'paid'){
+//            return response()->json([
+//                'message_en' => 'Invoice is not paid',
+//                'message_ru' => 'Счет не оплачен',
+//                'message_uz' => 'Hisob-faktura to`lanmagan',
+//            ], 400);
+//        }
+
+        $this->articleRepository->updateArticle(['status' => 'review'], $validate_data['article_id']);
+
+        return response()->json([
+            'message_en' => 'Article has been sent to review',
+            'message_ru' => 'Статья отправлена на рассмотрение',
+            'message_uz' => 'Maqola ko`rib chiqilish uchun yuborildi',
+        ]);
     }
 }

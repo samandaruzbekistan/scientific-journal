@@ -25,4 +25,12 @@ class ArticleRepository
     public function deleteArticle($id){
         return Article::where('id', $id)->delete();
     }
+
+    public function getArticlesByStatus($status){
+        return Article::where('status', $status)->get();
+    }
+
+    public function getArticlesByStatusAndType($status, $type){
+        return Article::where('status', $status)->where('article_type_id', $type)->get();
+    }
 }

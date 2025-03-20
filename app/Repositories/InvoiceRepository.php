@@ -18,6 +18,10 @@ class InvoiceRepository
         return Invoice::create($data);
     }
 
+    public function getInvoiceByArticleId($article_id){
+        return Invoice::where('article_id', $article_id)->first();
+    }
+
     public function updateInvoice($data, $id){
         return Invoice::where('id', $id)->update($data);
     }
