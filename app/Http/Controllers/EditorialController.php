@@ -146,6 +146,35 @@ class EditorialController extends Controller
         return response()->json($articles);
     }
 
+    public function update_article_status(Request $request){
+        $request->validate([
+            'article_id' => 'required|integer',
+            'status' => 'required|string',
+        ]);
+
+        $article = $this->articleRepository->getArticle($request->article_id);
+
+        if(!$article){
+            return response()->json([
+                'message' => 'Maqola topilmadi',
+            ], 404);
+        }
+
+        if($article->status != 'editorial'){
+            return response()->json([
+                'message' => 'Maqola tekshirishda emas',
+            ], 400);
+        }
+
+        $this->articleRepository->updateArticle([
+            'status' => $request->status,
+        ], $request->article_id);
+
+        return response()->json([
+            'message' => 'Maqola muvaffaqiyatli taxrirlashga yuborildi',
+        ]);
+    }
+
     public function get_article($id){
         $article = $this->articleRepository->getArticle($id);
 

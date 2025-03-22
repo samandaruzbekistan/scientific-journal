@@ -29,6 +29,7 @@ class Article extends Model
         'article_type_id',
         'user_id',
         'journal_id',
+        'status',
     ];
 
     public function authors(){

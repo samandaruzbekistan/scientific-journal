@@ -65,6 +65,7 @@ Route::prefix('admin')->group(function () {
 Route::prefix('editorial')->group(function () {
     Route::post('login', [EditorialController::class, 'login']);
     Route::post('review-articles', [EditorialController::class, 'get_review_articles']);
+    Route::post('update-article-status', [EditorialController::class, 'update_article_status']);
     Route::get('article/{id}', [EditorialController::class, 'get_article']);
     Route::post('send-article-to-editorial', [EditorialController::class, 'send_to_editorial']);
     Route::post('get-votes', [EditorialController::class, 'get_publish_votes']);
