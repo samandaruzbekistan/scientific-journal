@@ -160,18 +160,12 @@ class EditorialController extends Controller
             ], 404);
         }
 
-        if($article->status != 'editorial'){
-            return response()->json([
-                'message' => 'Maqola tekshirishda emas',
-            ], 400);
-        }
-
         $this->articleRepository->updateArticle([
             'status' => $request->status,
         ], $request->article_id);
 
         return response()->json([
-            'message' => 'Maqola muvaffaqiyatli taxrirlashga yuborildi',
+            'message' => 'Maqola statusi muvaffaqiyatli o\'zgartirildi',
         ]);
     }
 
