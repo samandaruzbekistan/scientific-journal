@@ -136,4 +136,23 @@ class JournalController extends Controller
             'message_en' => 'Journal completed successfully'
         ], 200);
     }
+
+    public function to_active(string $id)
+    {
+        $journal = $this->journalRepository->getJournal($id);
+        if(!$journal){
+            return response()->json([
+                'message_uz' => 'Jurnal topilmadi',
+                'message_ru' => 'Журнал не найден',
+                'message_en' => 'Journal not found'
+            ], 404);
+        }
+        $this->journalRepository->change_status_to_completed_all();
+        $this->journalRepository->change_status_to_active($id);
+        return response()->json([
+            'message_uz' => 'Jurnal muvaffaqiyatli faol holatga o\'tadi',
+            'message_ru' => 'Журнал успешно активирован',
+            'message_en' => 'Journal activated successfully'
+        ], 200);
+    }
 }

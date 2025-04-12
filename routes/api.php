@@ -53,12 +53,20 @@ Route::prefix('admin')->group(function () {
     Route::get('get/{id}', [AdminController::class, 'show']);
     Route::apiResource('journals', JournalController::class);
     Route::get('change-journal-status/{id}', [JournalController::class, 'change_status']);
+    Route::get('change-to-active/{id}', [JournalController::class, 'to_active']);
+    Route::get('get-active-journal', [JournalController::class, 'get_active_journal']);
 
     Route::apiResource('editorials', EditorialController::class);
     Route::apiResource('editorial-teams', EditorialsTeamController::class);
 
     Route::post('editorial-add-to-team', [EditorialsTeamController::class, 'add_editorial']);
     Route::post('editorial-delete-from-team', [EditorialsTeamController::class, 'delete_editorial']);
+
+    Route::post('get-articles-by-journal/{id}', [ArticleController::class, 'get_articles_by_journal_id']);
+
+
+    Route::post('search-author', [AuthorController::class, 'search']);
+    Route::post('search-author-by-orcid', [AuthorController::class, 'search_by_orcid']);
 
 });
 

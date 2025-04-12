@@ -37,4 +37,8 @@ class ArticleRepository
     public function getArticlesByStatusAndType($status, $type){
         return Article::where('status', $status)->where('article_type_id', $type)->get();
     }
+
+    public function getArticlesByJournalId($journal_id){
+        return Article::where('journal_id', $journal_id)->get();
+    }
 }

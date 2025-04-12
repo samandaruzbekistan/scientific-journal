@@ -39,4 +39,12 @@ class JournalRepository
         $article_count++;
         return Journal::where('id', $id)->update(['article_count' => $article_count]);
     }
+
+    public function change_status_to_active($id){
+        return Journal::where('id', $id)->update(['status' => 'active']);
+    }
+
+    public function change_status_to_completed_all(){
+        return Journal::where('status', 'active')->update(['status' => 'completed']);
+    }
 }

@@ -188,4 +188,18 @@ class ArticleController extends Controller
             'message_uz' => 'Maqola ko`rib chiqilish uchun yuborildi',
         ]);
     }
+
+    public function get_articles_by_journal_id($id){
+        $articles = $this->articleRepository->getArticlesByJournalId($id);
+
+        if(!$articles){
+            return response()->json([
+                'message_en' => 'Articles not found',
+                'message_ru' => 'Статьи не найдены',
+                'message_uz' => 'Maqolalar topilmadi',
+            ], 404);
+        }
+
+        return response()->json($articles);
+    }
 }

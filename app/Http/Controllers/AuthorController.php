@@ -77,4 +77,49 @@ class AuthorController extends Controller
 
         return redirect()->route('author.index')->with('success', 'Author deleted successfully');
     }
+
+    public function search(Request $request){
+        $request->validate([
+            'first_name' => 'nullable|string',
+            'last_name' => 'nullable|string',
+            'institution' => 'nullable|string',
+        ]);
+
+        $query = Author::query();
+        if ($request->has('first_name')) {
+            $query->where('first_name', 'like', '%' . $request->first_name . '%');
+        }
+        if ($request->has('last_name')) {
+            $query->where('last_name', 'like', '%' . $request->last_name . '%');
+        }
+        if ($request->has('institution')) {
+            $query->where('institution', 'like', '%' . $request->institution . '%');
+        }
+        $authors = $query->get();
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Author search results',
+            'data' => $authors
+        ]);
+    }
+
+    public function search_by_orcid(Request $request){
+        $request->validate([
+            'orcid' => 'required|string',
+        ]);
+
+        $author = Author::where('orcid', $request->orcid)->first();
+        if ($author) {
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Author found',
+                'data' => $author
+            ]);
+        } else {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Author not found'
+            ], 404);
+        }
+    }
 }
