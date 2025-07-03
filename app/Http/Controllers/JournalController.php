@@ -147,6 +147,14 @@ class JournalController extends Controller
                 'message_en' => 'Journal not found'
             ], 404);
         }
+        if($journal->status == 'active'){
+            $this->journalRepository->change_status_to_completed($id);
+            return response()->json([
+                'message_uz' => 'Jurnal holati o\'zgartirildi',
+                'message_ru' => 'Статус журнала изменен',
+                'message_en' => 'Journal status changed'
+            ], 400);
+        }
         $this->journalRepository->change_status_to_completed_all();
         $this->journalRepository->change_status_to_active($id);
         return response()->json([
